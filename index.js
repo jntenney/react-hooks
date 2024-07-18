@@ -1,7 +1,14 @@
+// define React variable as an arrow function that is immediately invoked when the variable is evaluated by JS
 const React = (() => {
-  let hooks = []; // this array gives the rules of hooks, they must run in the same order every render
+  // this array gives the rules of React hooks
+  //  because hooks store state in the array they must always run & in the same order on every render
+  //  ie, hooks can't be in conditional statements, etc
+  let hooks = [];
+  // this index keeps track of the index into hooks array for each hook
+  //  each hook must advance the hooks index so the next hook to execute uses the correct index for its own hook state
   let hooksIndex = 0;
 
+  //simulate useState hook
   function useState(initVal) {
     let state = hooks[hooksIndex] || initVal;
     let _index = hooksIndex;
@@ -15,7 +22,7 @@ const React = (() => {
     return [state, setState];
   }
 
-  // emulate the useEffect hook
+  // simulate the useEffect hook
   function useEffect(callback, dependencyArray) {
     let dependencyArrayChanged = true;
     let _index = hooksIndex;
@@ -42,20 +49,21 @@ const React = (() => {
     return comp;
   }
 
+  // return the useState, useEffect and render methods
   return { useState, useEffect, render };
-})();
+})(); //() immediately invoke the function when the React variable is evaluated
 
 function Component() {
-  const [count, setCount] = React.useState(1);
-  const [text, setText] = React.useState('2nd useState hook in component');
+  const [count, setCount] = React.useState(1); // hook 'count' state
+  const [text, setText] = React.useState('2nd useState hook in component'); // hook 'text' state
 
   React.useEffect(() => {
     console.log('useEffect hook for count change');
-  }, [count]);
+  }, [count]); // dependency on 'count' state, fire every time 'count' changes
 
   React.useEffect(() => {
     console.log('useEffect hook for text change');
-  }, [text]);
+  }, [text]); // dependency on 'text' state, fire every time 'text' changes
 
   return {
     render: () => {
@@ -70,6 +78,7 @@ function Component() {
   };
 }
 
+// simulate React component render life cycle and component events that occur
 let comp = React.render(Component);
 comp.click();
 comp = React.render(Component);
