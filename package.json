@@ -1,0 +1,11 @@
+{
+  "name": "react-hooks",
+  "version": "1.0.0",
+  "description": "React hooks under the hood emulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jasen Tenney",
+  "license": "ISC"
+}
