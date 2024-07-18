@@ -1,3 +1,5 @@
+// inspired by @swyx to demonstrate how React hooks work
+//
 // define React variable as an arrow function that is immediately invoked when the variable is evaluated by JS
 const React = (() => {
   // this array gives the rules of React hooks
@@ -10,6 +12,9 @@ const React = (() => {
 
   //simulate useState hook
   function useState(initVal) {
+    // each hook should capture the hooks array and hooksIndex for closure
+    //  closure is how each hook function maintains the state across multiple renders of
+    //  a Component
     let state = hooks[hooksIndex] || initVal;
     let _index = hooksIndex;
 
@@ -54,16 +59,17 @@ const React = (() => {
 })(); //() immediately invoke the function when the React variable is evaluated
 
 function Component() {
-  const [count, setCount] = React.useState(1); // hook 'count' state
-  const [text, setText] = React.useState('2nd useState hook in component'); // hook 'text' state
+  const [count, setCount] = React.useState(0); // hook 'count' state
+  const [text, setText] = React.useState('User initial text'); // hook 'text' state
 
-  React.useEffect(() => {
-    console.log('useEffect hook for count change');
-  }, [count]); // dependency on 'count' state, fire every time 'count' changes
+  //  Uncomment lines below to see how useEffect works
+  // React.useEffect(() => {
+  //   console.log('useEffect hook for count change');
+  // }, [count]); // dependency on 'count' state, fire every time 'count' changes
 
-  React.useEffect(() => {
-    console.log('useEffect hook for text change');
-  }, [text]); // dependency on 'text' state, fire every time 'text' changes
+  // React.useEffect(() => {
+  //   console.log('useEffect hook for text change');
+  // }, [text]); // dependency on 'text' state, fire every time 'text' changes
 
   return {
     render: () => {
@@ -79,8 +85,12 @@ function Component() {
 }
 
 // simulate React component render life cycle and component events that occur
-let comp = React.render(Component);
+let comp = React.render(Component); // {count: 0, text: 'User inital text' }
 comp.click();
-comp = React.render(Component);
+comp = React.render(Component); // {count: 1, text: 'User inital text' }
 comp.type('User typed new text');
-comp = React.render(Component);
+comp = React.render(Component); // {count: 1, text: 'User typed new text' }
+comp.click();
+comp = React.render(Component); // {count: 2, text: 'User typed new text' }
+comp.type('User typed more new text');
+comp = React.render(Component); // {count: 2, text: 'User typed more new text' }
